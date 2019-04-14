@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient , HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/map';
+import { HttpClient , HttpHeaders , HttpResponse} from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
+
 
 @Injectable()
 export class AuthService {
-    baseURL = 'http://localhost:5000/api/auth';
+    baseURL = 'http://localhost:5000/api/auth/';
     userToken: any;
 
 constructor(private http: HttpClient) { }
@@ -16,14 +18,12 @@ constructor(private http: HttpClient) { }
                 'Content-Type' : 'application/json'
             })
         };
-        return this.http.post(this.baseURL + 'login', model, httpOptions).subscribe(
-            data => {
-                const user = data;
-                if ( user) {
-                    localStorage.setItem('token', user.tokenString);
-                    this.userToken = user.tokenString;
+        return this.http.post<any>(this.baseURL + 'login', model, httpOptions)
+        .pipe(map(user => {
+                if (user && user.tokenString) {
+                    localStorage.setItem('token', JSON.stringify(user.tokenString));
                 }
-            }
+            })
         );
     }
 }
