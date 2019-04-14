@@ -12,7 +12,8 @@ import { NavComponent } from './nav/nav.component';
    declarations: [
       AppComponent,
       NavComponent
-   ],
+      NavComponent,
+      HttpResponse
    imports: [
       BrowserModule,
       AppRoutingModule,
